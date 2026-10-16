@@ -44,6 +44,18 @@
   --text-h4--line-height: 1.15;
   --text-lead: clamp(1.125rem, 1.059rem + 0.28vw, 1.3125rem); /* 18 → 21px */
   --text-lead--line-height: 1.6;
+  /*
+    Home hero headline, up to 104px. Sized against its column (an
+    @container) so line 1 plus its inline image pill always fits on one
+    line; this caps it below 104px in narrower columns.
+  */
+  --text-hero: min(6.5rem, 12cqi);
+  --text-hero--line-height: 1;
+  --text-hero--letter-spacing: -0.02em;
+  /* Our way statement: 32 → 64px */
+  --text-statement: clamp(2rem, 1.296rem + 3.005vw, 4rem);
+  --text-statement--line-height: 1.15;
+  --text-statement--letter-spacing: -0.01em;
   --text-eyebrow: 0.75rem;
   --text-eyebrow--line-height: 1.4;
   --text-eyebrow--letter-spacing: 0.22em;
@@ -55,9 +67,22 @@
   /* Layout */
   --container-site: 80rem; /* 1280px */
 
-  /* Radii: cards 24px, images 28px, buttons use rounded-full. */
+  /* Radii: cards 24px, images 28px, buttons and pills use rounded-full. */
   --radius-card: 1.5rem;
   --radius-image: 1.75rem;
+  --radius-tile: 1.25rem; /* 20px, gallery tiles */
+  --radius-thumb: 1.125rem; /* 18px, small images inside cards */
+
+  /* Fixed header height: h-header, pt-header, ... */
+  --spacing-header: 4.5rem; /* 72px, below lg */
+  --spacing-header-lg: 5.5rem; /* 88px, lg and up */
+
+  /* Floating cards (booking bar, popovers), tinted with sea. */
+  --shadow-float:
+    0 1px 2px color-mix(in oklab, var(--color-sea) 8%, transparent),
+    0 24px 60px -20px color-mix(in oklab, var(--color-sea) 30%, transparent);
+  /* Sticky header once it has detached from the top bar. */
+  --shadow-soft: 0 10px 30px -18px color-mix(in oklab, var(--color-sea) 35%, transparent);
 
   /* Easing (mirrors lib/motion.js) */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
@@ -68,6 +93,15 @@
 @theme inline {
   --font-display: var(--font-cormorant), ui-serif, Georgia, serif;
   --font-body: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Horizontal scroll rows (villa cards on mobile) without a visible bar. */
+@utility scrollbar-none {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @layer base {
@@ -105,5 +139,93 @@
 
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-accent-deep;
+  }
+}
+
+/*
+  react-day-picker, styled with site tokens (its own stylesheet is not
+  loaded). Targets the library's default rdp-* class names inside .calendar.
+  Day size is set with --cal-day so the mobile sheet can use larger targets.
+*/
+@layer components {
+  .calendar {
+    --cal-day: 2.5rem;
+    @apply relative text-sm text-ink;
+  }
+
+  .calendar .rdp-months {
+    @apply flex flex-wrap justify-center gap-x-10 gap-y-6;
+  }
+
+  .calendar .rdp-nav {
+    @apply pointer-events-none absolute inset-x-0 top-0 z-10 flex h-10 items-center justify-between;
+  }
+
+  .calendar .rdp-button_previous,
+  .calendar .rdp-button_next {
+    @apply pointer-events-auto inline-flex size-10 items-center justify-center rounded-full text-ink transition-colors duration-200 hover:bg-surface;
+  }
+
+  .calendar .rdp-button_previous[aria-disabled="true"],
+  .calendar .rdp-button_next[aria-disabled="true"] {
+    @apply cursor-default opacity-30 hover:bg-transparent;
+  }
+
+  .calendar .rdp-chevron {
+    @apply size-4 fill-current;
+  }
+
+  .calendar .rdp-month_caption {
+    @apply flex h-10 items-center justify-center font-display text-xl font-medium;
+  }
+
+  .calendar .rdp-month_grid {
+    @apply mt-2 border-collapse;
+  }
+
+  .calendar .rdp-weekday {
+    @apply h-9 text-center text-xs font-medium text-ink-muted;
+    width: var(--cal-day);
+  }
+
+  .calendar .rdp-day {
+    @apply p-0 text-center;
+    width: var(--cal-day);
+    height: var(--cal-day);
+  }
+
+  .calendar .rdp-day_button {
+    @apply mx-auto flex items-center justify-center rounded-full tabular-nums transition-colors duration-200 hover:bg-surface;
+    width: var(--cal-day);
+    height: var(--cal-day);
+  }
+
+  .calendar .rdp-today:not(.rdp-selected) .rdp-day_button {
+    @apply font-semibold underline decoration-accent-deep decoration-2 underline-offset-4;
+  }
+
+  .calendar .rdp-disabled .rdp-day_button {
+    @apply cursor-not-allowed text-ink-muted opacity-40 hover:bg-transparent;
+  }
+
+  /* Range: the band sits on the cells, the ends are solid sea circles. */
+  .calendar .rdp-range_middle {
+    @apply bg-surface-2;
+  }
+
+  .calendar .rdp-range_middle .rdp-day_button {
+    @apply rounded-none text-ink hover:bg-line;
+  }
+
+  .calendar .rdp-range_start {
+    background: linear-gradient(to right, transparent 50%, var(--color-surface-2) 50%);
+  }
+
+  .calendar .rdp-range_end {
+    background: linear-gradient(to left, transparent 50%, var(--color-surface-2) 50%);
+  }
+
+  .calendar .rdp-selected:not(.rdp-range_middle) .rdp-day_button {
+    @apply bg-sea font-medium text-on-dark hover:bg-sea-soft;
   }
 }

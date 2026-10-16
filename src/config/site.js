@@ -17,6 +17,9 @@ export const site = {
   whatsapp: "https://wa.me/639175550142",
   email: "stay@alonsiargao.com",
   bookingUrl: "https://example.com/book", // placeholder
+  ratesFrom: 8500, // lowest nightly rate, in PHP
+  guests: { maxAdults: 6, maxChildren: 4 },
+  maxNightsAhead: 365, // how far ahead guests can book, in days
   currency: {
     primary: "PHP",
     symbol: "₱",
@@ -26,11 +29,26 @@ export const site = {
   locale: "en-PH",
   checkIn: "2:00 PM",
   checkOut: "12:00 NN",
-  nearestAirport: { name: "Sayak Airport (IAO)", transferTime: "45 minutes" },
+  nearestAirport: {
+    name: "Sayak Airport (IAO)",
+    shortName: "Sayak Airport",
+    transferTime: "45 minutes",
+    transferPrice: 1500, // per private van, in PHP
+  },
+  restaurant: {
+    name: "Kusina Alon",
+    hours: [
+      { meal: "Breakfast", time: "6:30–10:30 AM" },
+      { meal: "Lunch", time: "12–3 PM" },
+      { meal: "Dinner", time: "6–10 PM" },
+    ],
+  },
   social: { instagram: "#", facebook: "#", tiktok: "#" },
+  rating: { score: 4.9, count: 286, label: "guest reviews" },
   nav: [
-    { label: "Rooms", href: "/rooms" },
+    { label: "Villas", href: "/rooms" },
     { label: "Experiences", href: "/experiences" },
+    { label: "Dining", href: "/#dining" },
     { label: "Getting here", href: "/getting-here" },
   ],
 };

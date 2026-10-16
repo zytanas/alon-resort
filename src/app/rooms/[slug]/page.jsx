@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
-import ComingSoon from "@/components/layout/ComingSoon";
 import { rooms } from "@/content/rooms";
+import OtherVillas from "@/components/sections/OtherVillas/OtherVillas";
+import VillaDetail from "@/components/sections/VillaDetail/VillaDetail";
 
 // Only slugs from content/rooms.js exist; anything else is a 404.
 export const dynamicParams = false;
@@ -16,7 +17,8 @@ function getRoom(slug) {
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const room = getRoom(slug);
-  return { title: room ? room.name : "Room" };
+  if (!room) return {};
+  return { title: room.name, description: room.shortDescription };
 }
 
 export default async function RoomPage({ params }) {
@@ -24,5 +26,10 @@ export default async function RoomPage({ params }) {
   const room = getRoom(slug);
   if (!room) notFound();
 
-  return <ComingSoon title={room.name} />;
+  return (
+    <>
+      <VillaDetail room={room} />
+      <OtherVillas currentSlug={room.slug} />
+    </>
+  );
 }

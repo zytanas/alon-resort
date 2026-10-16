@@ -1,0 +1,27 @@
+// Labels for the booking form (hero card and villa pages), its popovers and
+// the mobile sheet. Placeholders in {braces} are filled with lib/format.
+export const booking = {
+  label: "Plan your stay",
+  submit: "Check availability",
+  checkIn: "Check-in",
+  checkOut: "Check-out",
+  guests: "Guests",
+  addDates: "Add dates",
+  nights: { one: "{n} night", other: "{n} nights" },
+  chooseCheckOut: "Now choose your check-out date",
+  adults: "Adults",
+  children: "Children",
+  childrenHint: "Ages 0–12",
+  adultCount: { one: "{n} adult", other: "{n} adults" },
+  childCount: { one: "{n} child", other: "{n} children" },
+  decrease: "Fewer {label}",
+  increase: "More {label}",
+  clearDates: "Clear dates",
+  done: "Done",
+  missingDates: "Choose your dates first",
+  datesDialog: "Choose your dates",
+  guestsDialog: "Choose guests",
+  sheetTitle: "Plan your stay",
+  close: "Close",
+  dragHint: "Drag down to close",
+};
