@@ -1,26 +1,109 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+  Alon design tokens.
+  Every token below becomes a Tailwind utility (bg-sea, text-ink-muted,
+  rounded-card, py-section, text-display, ease-out-expo, ...) and a CSS
+  variable on :root. Components use these, never raw hex values.
+
+  Contrast rules:
+  - accent (coral) is for large text, decorative shapes and icons only.
+  - Small coral text uses accent-deep.
+  - Light text (on-dark) sits only on sea, never on coral.
+*/
+
+@theme {
+  /* Reset Tailwind's default palette so only brand colours exist. */
+  --color-*: initial;
+
+  --color-bg: #fbf8f3; /* coconut white, page background */
+  --color-surface: #f3ece1; /* sand, cards and alternate sections */
+  --color-surface-2: #e9dfcf; /* deeper sand, card borders, hovers */
+  --color-line: #ddd2c0; /* dividers */
+  --color-ink: #1e2b2a; /* headings and body text */
+  --color-ink-muted: #5c6b69; /* secondary text */
+  --color-sea: #0f4c4a; /* deep sea teal: dark sections, primary buttons */
+  --color-sea-soft: #2f6f6b; /* hover state for sea */
+  --color-accent: #e07a5f; /* sunset coral: highlights, small accents */
+  --color-accent-deep: #b85a41; /* coral for small text that needs contrast */
+  --color-on-dark: #fbf8f3; /* text on sea backgrounds */
+
+  /* Fluid type scale: min at ~375px, max at ~1440px. */
+  --text-display: clamp(3rem, 1.416rem + 6.76vw, 7.5rem); /* 48 → 120px */
+  --text-display--line-height: 0.95;
+  --text-display--letter-spacing: -0.02em;
+  --text-h1: clamp(2.5rem, 1.62rem + 3.76vw, 5rem); /* 40 → 80px */
+  --text-h1--line-height: 1;
+  --text-h1--letter-spacing: -0.015em;
+  --text-h2: clamp(2.125rem, 1.553rem + 2.44vw, 3.75rem); /* 34 → 60px */
+  --text-h2--line-height: 1.02;
+  --text-h2--letter-spacing: -0.01em;
+  --text-h3: clamp(1.625rem, 1.405rem + 0.94vw, 2.25rem); /* 26 → 36px */
+  --text-h3--line-height: 1.08;
+  --text-h4: clamp(1.3125rem, 1.2rem + 0.47vw, 1.625rem); /* 21 → 26px */
+  --text-h4--line-height: 1.15;
+  --text-lead: clamp(1.125rem, 1.059rem + 0.28vw, 1.3125rem); /* 18 → 21px */
+  --text-lead--line-height: 1.6;
+  --text-eyebrow: 0.75rem;
+  --text-eyebrow--line-height: 1.4;
+  --text-eyebrow--letter-spacing: 0.22em;
+
+  /* Section spacing: py-section, py-section-sm, gap-section, ... */
+  --spacing-section: clamp(4.5rem, 2.9rem + 6.8vw, 9rem); /* 72 → 144px */
+  --spacing-section-sm: clamp(3rem, 2.12rem + 3.76vw, 5.5rem); /* 48 → 88px */
+
+  /* Layout */
+  --container-site: 80rem; /* 1280px */
+
+  /* Radii: cards 24px, images 28px, buttons use rounded-full. */
+  --radius-card: 1.5rem;
+  --radius-image: 1.75rem;
+
+  /* Easing (mirrors lib/motion.js) */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Font families come from next/font variables set on <html> in layout.jsx. */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-cormorant), ui-serif, Georgia, serif;
+  --font-body: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
   }
-}
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    @apply bg-bg font-body text-base text-ink;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display font-medium text-ink;
+    line-height: 1;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    @apply bg-accent/25 text-ink;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-accent-deep;
+  }
 }
